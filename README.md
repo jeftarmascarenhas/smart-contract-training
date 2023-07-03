@@ -1,3 +1,9 @@
+<div align="center">
+<img src="./assets//images/logo–small.png" width="200px"  />
+<br />
+<br />
+<div />
+
 # Smart Contract Training
 
 My studies about smart contract with Solidity
