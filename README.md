@@ -2,9 +2,8 @@
 <img src="./assets//images/logo–small.png" width="200px"  />
 <br />
 <br />
-<div />
-
-# Smart Contract Training
+<h1>Smart Contract Training</h1>
+</div>
 
 My studies about smart contract with Solidity
 
