@@ -36,20 +36,20 @@ contract BuildNFT is ERC721A, Ownable, Pausable {
         _mint(msg.sender, 2);
     }
 
-    function mint(uint256 quantity) external payable whenNotPaused {
-        if(totalSupply() + quantity > _maxSupply) {
-            revert MaxSupplyExcesseded(totalSupply() + quantity);
+    function mint(uint256 quantity_) external payable whenNotPaused {
+        if(totalSupply() + quantity_ > _maxSupply) {
+            revert MaxSupplyExcesseded(totalSupply() + quantity_);
         }
 
-        if(_pricePerToken * quantity > msg.value) {
+        if(_pricePerToken * quantity_ > msg.value) {
             revert ValueNotEnough(msg.value);
         }
 
-        if (walletMinted[msg.sender] >= _MAX_PER_WALLET || quantity > _MAX_PER_WALLET) {
+        if (walletMinted[msg.sender] >= _MAX_PER_WALLET || quantity_ > _MAX_PER_WALLET) {
            revert MaxPerWallet(_MAX_PER_WALLET);
         }
 
-        _mint(msg.sender, quantity);
+        _mint(msg.sender, quantity_);
         walletMinted[msg.sender] += 1;
     }
 
@@ -62,8 +62,8 @@ contract BuildNFT is ERC721A, Ownable, Pausable {
         emit Withdrawn(msg.sender, balance);
     }
 
-    function setBaseURI(string calldata baseURI) external onlyOwner {
-        _baseTokenURI = baseURI;
+    function setBaseURI(string calldata baseURI_) external onlyOwner {
+        _baseTokenURI = baseURI_;
     }
 
     function tokenURI(
@@ -82,12 +82,12 @@ contract BuildNFT is ERC721A, Ownable, Pausable {
         return _baseTokenURI;
     }
 
-    function setPricePerToken(uint newPrice) external onlyOwner {
-        _pricePerToken = newPrice;
+    function setPricePerToken(uint newPrice_) external onlyOwner {
+        _pricePerToken = newPrice_;
     }
 
-    function setMaxSupply(uint supply) external onlyOwner {
-        _maxSupply += supply;
+    function setMaxSupply(uint newSupply_) external onlyOwner {
+        _maxSupply = newSupply_;
     }
 
     function pause() external onlyOwner {
