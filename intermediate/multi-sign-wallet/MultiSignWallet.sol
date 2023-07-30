@@ -28,7 +28,7 @@ contract MultiSignWallet {
     Transaction[] public transactions;
     uint256 public required;
     mapping(address => bool) public isOwner;
-    mapping(uint256 => mapping(address => bool)) public approved;
+    mapping(uint256 => mapping(address => bool)) private approved;
 
     /**
     * For your test
@@ -54,7 +54,7 @@ contract MultiSignWallet {
     }
 
     modifier onlyOwner() {
-        require(!isOwner[msg.sender], "only owner");
+        require(isOwner[msg.sender], "only owner");
         _;
     }
     
@@ -69,13 +69,15 @@ contract MultiSignWallet {
     }
     
     modifier notExecuted(uint256 txId_) {
-        require(transactions[txId_].executed, "txId already executed");
+        require(!transactions[txId_].executed, "txId already executed");
         _;
     }
 
     /**
     * For your test 
-    * ["0x617F2E2fD72FD9D5503197092aC168c91465E7f2",1000000000000000000,"0x61736466", true]
+    * to = 0x617F2E2fD72FD9D5503197092aC168c91465E7f2
+    * value = 1000000000000000000
+    * data = "0x6e667463686f6f7365"
     */
     function submit(address to_, uint256 value_, bytes calldata data_) external onlyOwner {
         transactions.push(Transaction({
@@ -126,11 +128,12 @@ contract MultiSignWallet {
         emit Execute(txId_);
     }
 
-    function _getApproveCount(uint256 txId_) internal view returns(uint256 count) {
-        for (uint256 i=0; 1 < owners.length; i++)  {
+    function _getApproveCount(uint256 txId_) public view returns(uint256 count) {
+        for (uint256 i; i < owners.length; i++)  {
             if (approved[txId_][owners[i]]) {
-                count++;
+                count+= 1;
             }
         }
+        return count;
     }
 }
