@@ -1,3 +1,20 @@
+# How to create a Multi Sign Wallet Smart Contract
+
+Multi Sign Wallets are smart contract that allow multiple signers to review and agree on action on the blockchain before action is executed.
+
+For example, a multisign wallet could be used to control ETH, or smart contract, requiring signatures from
+at least M of N total signers to execute the action.
+
+See how to make this smart contract [click here](https://www.youtube.com/@nftchoose)
+
+<hr />
+
+How to make a pretty simple Multi Sign Wallet
+
+Veja como fazer este smart contract [click here](https://www.youtube.com/@nftchoose)
+
+## Multi Sign Wallet Smart Contract
+```javascript
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
@@ -134,3 +151,4 @@ contract MultiSignWallet {
         }
     }
 }
+```
