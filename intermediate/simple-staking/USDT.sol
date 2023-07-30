@@ -5,6 +5,7 @@ pragma solidity ^0.8.19;
     Jeftar Mascarenhas
     twitter: @jeftar
     github: github.com/jeftarmascarenhas
+    linkedin: linkedin.com/in/jeftarmascarenhas/
     site: jeftar.com.br
     youtube: youtube.com/@nftchoose
 */
