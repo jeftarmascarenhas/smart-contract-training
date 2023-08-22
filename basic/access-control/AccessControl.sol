@@ -10,7 +10,7 @@ pragma solidity ^0.8.21;
     youtube: youtube.com/@nftchoose
 */
 
-contract Context {
+abstract contract Context {
     function _msgSender() internal view virtual returns(address) {
         return msg.sender;
     }
@@ -20,7 +20,12 @@ contract Context {
     }
 }
 
-contract AccessControl is Context {
+/**
+ * @dev Módulo de contrato que permite implementar controle de acesso.
+ * Esta é uma versão leve que não permite enumerar função 
+ * membros, exceto por meios off-chain, acessando os logs de eventos do contrato. 
+ */
+abstract contract AccessControl is Context {
     bytes32 public constant _DEFAULT_ADMIN = 0x00;
 
     mapping(bytes32 => mapping(address => bool)) private _roles;

@@ -10,7 +10,17 @@ pragma solidity ^0.8.21;
     youtube: youtube.com/@nftchoose
 */
 
-contract Context {
+
+/**
+ * @dev Fornece informações sobre o contexto de execução atual, incluindo o 
+ * remetente da transação e seus dados. Embora estes estejam geralmente disponíveis 
+ * via msg.sender e msg.data, eles não devem ser acessados ​​de forma tão direta 
+ * maneira, pois ao lidar com meta-transações a conta enviando e 
+ * pagando pela execução pode não ser o remetente real (no que diz respeito a um aplicativo 
+ * está preocupado). 
+ * Este contrato é necessário apenas para contratos intermediários, semelhantes a bibliotecas.
+ */
+abstract contract Context {
     function _msgSender() internal view virtual returns(address) {
         return msg.sender;
     }
