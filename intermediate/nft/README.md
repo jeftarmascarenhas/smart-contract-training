@@ -42,7 +42,7 @@ import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract BuildNFT is ERC721A, Ownable, Pausable {
+contract NFT is ERC721A, Ownable, Pausable {
     error ValueNotEnough(uint256 value);
     error MaxSupplyExcesseded(uint256 quantity);
     error MaxPerWallet(uint256 max);

@@ -16,8 +16,8 @@ Veja como fazer cada smart contract no my
 
 ## Basics (Básico)
 
-Coming soon(Em breve)
-
 ## Intermediate(Intermediário)
 
 - [x] [Simple Stake](./intermediate/simple-staking)
+- [x] [Multi Sign Wallet](./intermediate/multi-sign-wallet/README.md)
+- [x] [NFT Full Contract](./intermediate/nft/README.md)
