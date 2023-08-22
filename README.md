@@ -5,6 +5,8 @@
 <h1>Smart Contract Training</h1>
 </div>
 
+<a href="https://github.com/jeftarmascarenhas/smart-contract-training">Go back to repo</a>
+
 My studies about smart contract with Solidity
 
 See how make each smart contract on my [Youtube channel](https://www.youtube.com/@nftchoose)
