@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-contract ArrayPagination {
+contract PaginationPattern {
     uint256 ids;
 
     mapping(uint256 => Item) public arr;
