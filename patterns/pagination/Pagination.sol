@@ -16,12 +16,15 @@ contract PaginationPattern {
         ids++;
     }
 
-    function fetchPage(uint256 cursor, uint256 howMany)
+    function fetchPage(uint256 cursor, uint256 pageSize)
     public
     view
-    returns (Item[] memory items, uint256 newCursor)
-    {
-        uint256 length = howMany;
+    returns (
+        Item[] memory items,
+        uint256 newCursor
+    ) {
+        // No vídeo não tem esse trecho de código mais ele valida o tamanho que será retornado.
+        uint256 length = pageSize;
         if (length > ids - cursor) {
             length = ids - cursor;
         }

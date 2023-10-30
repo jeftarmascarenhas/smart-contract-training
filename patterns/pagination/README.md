@@ -1,5 +1,7 @@
 # Pattern Cursor Pagination Solidity
 
+Cursor-based paging works by using a unique, sequential key that indicates from which record the data will be returned.
+
 This smart contract has many features like:
 - Cursor Pagination pattern with solidity
 - Create memory array from mapping
@@ -7,6 +9,9 @@ This smart contract has many features like:
 See how to make this smart contract [click here](https://www.youtube.com/@nftchoose)
 
 <hr />
+
+A paginação baseada em cursor funciona por uma chave única e sequencial que indica a partir de que 
+registro os dados serão retornados.
 
 Este contrato inteligente tem muitos recursos como:
 - Padrão de paginação utilizando cursor com solidity
