@@ -13,14 +13,20 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 
 interface InterfaceERC20 {
- function transfer(address to, uint256 amount) external returns (bool);
- function transferFrom(address from, address to, uint256 amount) external returns (bool);
- function mint(address _to, uint256 _amount) external;
+    function transfer(address to, uint256 amount) external returns (bool);
+
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) external returns (bool);
+
+    function mint(address _to, uint256 _amount) external;
 }
 
 contract Staking {
     // Neste Exemplo Ether será o token para fazer staking(Apostando)
-    InterfaceERC20 public tokenToStake;
+    IERC20 public tokenToStake;
     // Neste Exemplo USDT será o token para reward(Recompensa)
     InterfaceERC20 public rewardToken;
 
@@ -32,18 +38,23 @@ contract Staking {
     event RewardPaid(address indexed _user, uint256 _reward);
 
     constructor(address _tokenToStake, address _rewardToken) {
-        tokenToStake = InterfaceERC20(_tokenToStake);
+        tokenToStake = IERC20(_tokenToStake);
         rewardToken = InterfaceERC20(_rewardToken);
     }
 
     function stake(uint256 _amount) external {
+        require(_amount > 0, "Staking amount must be greater than 0");
 
-       require(amount > 0, "Staking amount must be greater than 0");
+        require(
+            tokenToStake.balanceOf(msg.sender) >= _amount,
+            "Insufficient balance"
+        );
 
-       require(tokenToStake.balanceOf(msg.sender) >= amount, "Insufficient balance");
+        require(
+            tokenToStake.allowance(msg.sender, address(this)) >= _amount,
+            "Insufficient allowance"
+        );
 
-       require(tokenToStake.allowance(msg.sender, address(this)) >= amount, "Insufficient allowance");
-        
         if (stakedAmount[msg.sender] == 0) {
             lastStakeTime[msg.sender] = block.timestamp;
         }
@@ -55,31 +66,29 @@ contract Staking {
     }
 
     function withdraw(uint256 amount) external {
+        require(amount > 0, "Withdrawal amount must be greater than 0");
 
-       require(amount > 0, "Withdrawal amount must be greater than 0");
+        require(
+            stakedAmount[msg.sender] >= amount,
+            "Insufficient staked amount"
+        );
 
-       require(stakedAmount[msg.sender] >= amount, "Insufficient staked amount");
+        uint256 reward = getReward(msg.sender);
 
- 
+        if (reward > 0) {
+            rewardToken.mint(msg.sender, reward);
 
-       uint256 reward = getReward(msg.sender);
+            emit RewardPaid(msg.sender, reward);
+        }
 
-       if (reward > 0) {
+        stakedAmount[msg.sender] -= amount;
 
-           rewardToken.mint(msg.sender, reward);
+        tokenToStake.transfer(msg.sender, amount);
 
-           emit RewardPaid(msg.sender, reward);
-
-       }
-
-      stakedAmount[msg.sender] -= amount;
-
-      tokenToStake.transfer(msg.sender, amount);
-
-      emit Withdrawn(msg.sender, amount);
+        emit Withdrawn(msg.sender, amount);
     }
 
-    function getReward(address _user) public view returns(uint256) {
+    function getReward(address _user) public view returns (uint256) {
         // tempo decorrido
         uint256 timeElapsed = block.timestamp - lastStakeTime[_user];
         uint256 stakedAmountUser = stakedAmount[_user];
@@ -91,7 +100,7 @@ contract Staking {
         return stakedAmountUser * timeElapsed;
     }
 
-    function getStackBalance(address _user) external view returns(uint256) {
+    function getStackBalance(address _user) external view returns (uint256) {
         return stakedAmount[_user];
     }
 }
