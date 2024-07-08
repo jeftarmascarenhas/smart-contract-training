@@ -1,2 +1,6 @@
+#folders
 utils
 club
+
+#files
+.DS_Store
