@@ -5,7 +5,7 @@ We're simulate a DvP to Car.
 
 **Note:** Important! This contracts is only to study and practice. Under no circumstances should this code be used in production.
 
-Watch th video on [NFT Choose Channel](http://)
+Watch th video on [NFT Choose Channel](https://youtu.be/8nBCK_8kvng)
 
 Smart Contracts
 
