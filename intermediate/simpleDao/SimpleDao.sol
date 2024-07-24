@@ -8,6 +8,26 @@ pragma solidity ^0.8.19;
 // execute
 
 contract SimpleDao {
+  uint256 public proposalIds;
+  uint256 public totalMembers;
+  uint256 public totalSupply;
+  uint256 private constant NOT_ENTERED = 0;
+  uint256 private constant ENTERED = 1;
+  uint256 private status;
+
+  mapping (uint256 => Proposal) public proposals;
+  mapping (address => bool) public members;
+  mapping (address => uint256) public balances;
+
+  struct Proposal {
+    address payable beneficiary;
+    string description;
+    uint256 amount;
+    mapping(address => bool) votes;
+    uint256 countVotes;
+    bool executed;
+  }
+
   event CreateProposal(uint256 indexed proposalId, address member);
   event ExecuteProposal(uint256 indexed proposalId, address member);
   event CreateVote(uint256 indexed proposalId, address member);
@@ -22,25 +42,11 @@ contract SimpleDao {
   error ProposalNotZero();
   error ValueNotEnough(uint256);
   error MemberRemoveWithdraw(address);
-  
-  uint256 public proposalIds;
-  uint256 public totalMembers;
-  uint256 public totalSupply;
-
-  mapping (uint256 => Proposal) public proposals;
-  mapping (address => bool) public members;
-  mapping (address => uint256) public balances;
-
-  struct Proposal {
-    string description;
-    mapping(address => bool) votes;
-    uint256 countVotes;
-    bool executed;
-  }
 
   constructor() {
     totalMembers++;
     members[msg.sender] = true;
+    status = NOT_ENTERED;
   }
 
   modifier onlyMember {
@@ -67,13 +73,25 @@ contract SimpleDao {
     _;
   }
 
-  function createProposal(string memory description) external onlyMember returns(bool) {
+  modifier reentrancyGuard {
+    if (status == ENTERED) {
+      revert ReentrancyCall();
+    } else {
+      status = ENTERED;
+    }
+    _;
+    status = NOT_ENTERED;
+  }
+
+  function createProposal(address payable beneficiary, uint256 amount, string memory description) external onlyMember returns(bool) {
     
     proposalIds++;
 
     Proposal storage newProposal = proposals[proposalIds];
     
+    newProposal.beneficiary = beneficiary;
     newProposal.description = description;
+    newProposal.amount = amount;
     newProposal.votes[msg.sender] = true;
     newProposal.countVotes++;
 
@@ -90,7 +108,7 @@ contract SimpleDao {
     emit CreateVote(proposalId, msg.sender);
   }
 
-  function execute(uint256 proposalId) external onlyMember checkProposal(proposalId) {
+  function execute(uint256 proposalId) external onlyMember reentrancyGuard checkProposal(proposalId) {
     if(proposals[proposalId].executed) {
         revert ProposalExecuted(proposalId);
     }
@@ -98,7 +116,12 @@ contract SimpleDao {
     if (!(proposals[proposalId].countVotes > totalMembers / 2)) {
         revert ProposalDoesntVotesEnough();
     }
+    
+    if (proposals[proposalId].amount > balance) {
+        revert ValueNotEnough();
+    }
 
+    (bool success, ) = proposals[proposalId].beneficiary.call{value: proposals[proposalId].amount}("");
     proposals[proposalId].executed = true;
     
     emit ExecuteProposal(proposalId, msg.sender);
@@ -115,19 +138,22 @@ contract SimpleDao {
     emit AddNewMember(msg.sender);
   }
   
-  function removeMember() external onlyMember {
+  function removeMember() external onlyMember reentrancyGuard {
     uint balance = balances[msg.sender];
     if (balance < 0) {
         revert ValueNotEnough(balance);
     }
+   
     members[msg.sender] = false;
     balances[msg.sender] = 0;
+    totalSupply -= balance;
+    totalMembers--;
+
     (bool success,) = payable(msg.sender).call{value: balance}("");
     if(!success) {
         revert MemberRemoveWithdraw(msg.sender);
     }
-    totalSupply -= balance;
-    totalMembers--;
+    
     emit RemoveMember(msg.sender);
   }
 
