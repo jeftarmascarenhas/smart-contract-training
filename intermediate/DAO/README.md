@@ -2,4 +2,4 @@
 
 List of all DAO smart contracts
 
-- [x] [Trust DAO](./TrustDao/TrustDao.sol)
+- [x] [Trust DAO](./TrustDao/README.md)
