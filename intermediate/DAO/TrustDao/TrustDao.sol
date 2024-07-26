@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 /**
- * @title SimpleDao
+ * @title TrustDao
  * @notice Não use este contrato em produção.
  * @dev Este contrato implementa uma DAO simples com funcionalidades básicas.
  * Requisitos:
