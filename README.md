@@ -22,6 +22,14 @@ Veja como fazer cada smart contract no my
 
 - [x] [ Access Control](./basic/access-control/README.md)
 - [x] [ Context](./basic/context/README.md)
+- [x] [ User Defined Type](./basic/solidity-updates/README.md)
+
+## ERCs
+
+- [x] [ ERC-1155 Explained](./ERCs//ERC1155/README.md)
+- [ ] [ ERC-20](#)
+- [ ] [ ERC-4337](#)
+- [ ] [ ERC-3643](#)
 
 ## Intermediate(Intermediário)
 
